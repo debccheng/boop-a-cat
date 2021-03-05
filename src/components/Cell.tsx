@@ -9,14 +9,15 @@ const Cell = ({
   clicked,
   escaped,
   handleClick,
-  setEscaped }:
+  setEscaped,
+}:
   {
     popup: number,
     id: number,
     clicked: boolean,
     escaped: boolean,
     handleClick: () => void,
-    setEscaped: React.Dispatch<React.SetStateAction<boolean>>
+    setEscaped: React.Dispatch<React.SetStateAction<boolean>>,
   }) => {
 
   const animateBox = {
@@ -34,13 +35,13 @@ const Cell = ({
         {popup === id
           ?
           <>
-          {console.log(escaped)}
-          <img
-            src={clicked ? clickedCat : cat}
-            alt="cat"
-            className={`cat ${clicked ? 'catOut' : null} ${escaped ? 'catEscape' : null}`}
-            onClick={handleClick}
-          />
+            {console.log(escaped)}
+            <img
+              src={clicked ? clickedCat : cat}
+              alt="cat"
+              className={`cat ${clicked ? 'catOut' : null} ${escaped ? 'catEscape' : null}`}
+              onClick={handleClick}
+            />
           </>
           :
           null

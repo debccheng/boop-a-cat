@@ -19,6 +19,11 @@ const Game = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  let [score, setScore] = useState<number>(0);
+
+  // Set animation for escaped cat in child component
+  const [escaped, setEscaped] = useState<boolean>(false);
+
   // Determine random popup
   const getRandomInt = (min: number, max: number, currentNum?: number): number => {
     if (!currentNum) {
@@ -34,14 +39,13 @@ const Game = () => {
   const [clicked, setClicked] = useState<boolean>(false);
   const handleClick = () => {
     setClicked(true);
+    setScore(score += 1);
     const catImg: Element = document.getElementsByClassName('cat')[0];
     if (catImg) {
       const top = window.getComputedStyle(catImg).getPropertyValue('top');
       catImg.setAttribute("style", `top: ${top}`);
     }
   };
-
-  const [escaped, setEscaped] = useState<boolean>(false);
 
   const popCat = () => {
     setPopupPosition(getRandomInt(1, 9, popupPosition));
@@ -66,22 +70,28 @@ const Game = () => {
   });
 
   return (
-    <div
-      className="grid"
-      style={WidthMoreThanHeight ? { width: '40vw', height: '40vw' } : { width: '40vh', height: '40vh' }}
-    >
-      {positions.map((position) =>
-        <Cell
-          key={position}
-          id={position}
-          popup={popupPosition}
-          clicked={clicked}
-          escaped={escaped}
-          handleClick={handleClick}
-          setEscaped={setEscaped}
-        />
-      )}
-    </div>
+    <>
+      <div className="">
+        <h2 className="score"> Boop: {score}</h2>
+        <h2 className="countdown">Time: </h2>
+      </div>
+      <div
+        className="grid"
+        style={WidthMoreThanHeight ? { width: '40vw', height: '40vw' } : { width: '40vh', height: '40vh' }}
+      >
+        {positions.map((position) =>
+          <Cell
+            key={position}
+            id={position}
+            popup={popupPosition}
+            clicked={clicked}
+            escaped={escaped}
+            handleClick={handleClick}
+            setEscaped={setEscaped}
+          />
+        )}
+      </div>
+    </>
   );
 }
 
