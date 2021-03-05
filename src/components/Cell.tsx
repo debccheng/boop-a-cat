@@ -1,35 +1,56 @@
 import React, { useState } from 'react';
 import cat from '../assets/cat.png';
-import pettedCat from '../assets/cat_petted.png';
+import clickedCat from '../assets/cat_petted.png';
 import box from '../assets/box.png'
 
-const Cell = ({ popup, id }: { popup: number, id: number }) => {
-  const [clicked, setClicked] = useState<boolean>(false);
+const Cell = ({
+  popup,
+  id,
+  clicked,
+  escaped,
+  handleClick,
+  setEscaped }:
+  {
+    popup: number,
+    id: number,
+    clicked: boolean,
+    escaped: boolean,
+    handleClick: () => void,
+    setEscaped: React.Dispatch<React.SetStateAction<boolean>>
+  }) => {
 
-  const handleClick = () => {
-    setClicked(true);
-    const catImg: Element = document.getElementsByClassName('cat')[0];
-    if (catImg) {
-      const top = window.getComputedStyle(catImg).getPropertyValue('top');
-      console.log(top);
-      catImg.setAttribute("style", `top: ${top}`);
-    }
+  const animateBox = {
+    "WebkitAnimation": "shake 0.4s linear both",
+    "animation": "shake 0.4s linear both"
   };
+
+  setTimeout(() => {
+    setEscaped(true);
+  }, 2500);
 
   return (
     <div className="cell" id={`cell-${id}`}>
-      <div className="media" onClick={handleClick}>
+      <div className="media" >
         {popup === id
           ?
+          <>
+          {console.log(escaped)}
           <img
-            src={clicked ? pettedCat : cat}
+            src={clicked ? clickedCat : cat}
             alt="cat"
-            className={`cat ${clicked? 'catOut' : null}`}
+            className={`cat ${clicked ? 'catOut' : null} ${escaped ? 'catEscape' : null}`}
+            onClick={handleClick}
           />
+          </>
           :
           null
         }
-        <img src={box} alt="box" className="box" />
+        <img
+          src={box}
+          alt="box"
+          className="box"
+          style={popup === id ? animateBox : undefined}
+        />
       </div>
     </div>
   );

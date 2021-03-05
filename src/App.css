@@ -11,47 +11,73 @@
   padding-bottom: 30%;
   /* = width for a 1:1 aspect ratio */
   margin: 1.66%;
-  /* background-color: slateblue; */
 }
 
 .media {
   position: absolute;
-  top: 15%;
   left: 15%;
   height: 50%; /* = 100% - 2*5% padding */
   width: 50%; /* = 100% - 2*5% padding */
   padding: 10%;
+  /* border: 1px solid gold;
+  background-color: gold; */
 }
 
 .cat {
   position: absolute;
-  top: 69%;
+  top: 65%;
   height: 75%;
   width: auto;
-  -webkit-animation: slide 1.5s forwards ease-in;
-  animation: slide 1.5s forwards ease-in;
+  -webkit-animation: slide 1.5s forwards cubic-bezier(0.755, 0.0675, 0.00, 0.973);
+  animation: slide 1.5s forwards cubic-bezier(0.755, 0.0675, 0.00, 0.973);
 }
 
 .catOut {
   position: absolute;
   height: 75%;
   width: auto;
-  -webkit-animation: slideOut 1s forwards ease-out;
-  animation: slideOut 1s forwards ease-out;
+  -webkit-animation: slideOut 1.5 forwards  cubic-bezier(0.00, 0.272, 0.235, 1.20);
+  animation: slideOut 1.5s forwards cubic-bezier(0.00, 0.272, 0.235, 1.20);
+}
+
+.catEscape {
+  top: 0%;
+  position: absolute;
+  height: 75%;
+  width: auto;
+  animation-delay: 5s;
+  -webkit-animation: slideOut 1.5 forwards  cubic-bezier(0.00, 0.272, 0.235, 1.20);
+  animation: slideOut 1.5s forwards cubic-bezier(0.00, 0.272, 0.235, 1.20);
 }
 
 @keyframes slide {
-  100% { top: 10%; }
+  100% { top: 0%; }
 }
 
 @keyframes slideOut {
-  100% {top: 69%}
+  100% {top: 64%}
 }
 
 .box {
   position: absolute;
-  top: 70%;
-  left: 0;
-  width: 100%;
+  top: 60%;
+  left: -4%;
+  width: 110%;
   height: auto;
+  transform: translate(0);
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate(2%);
+  }
+  20%, 80% {
+    transform: translate(-2%);
+  }
+  30%, 70% {
+    transform: translate(3%);
+  }
+  40%, 60% {
+    transform: translate(-1%);
+  }
 }
