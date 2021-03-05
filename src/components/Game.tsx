@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import useViewport from '../helpers/useViewport';
 import Cell from './Cell';
 
 const Game = () => {
 
-  // Resize Game Grid based on viewport
-  const [WidthMoreThanHeight, setWidthMoreThanHeight] = useState<boolean>(true);
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= window.innerHeight) {
-        setWidthMoreThanHeight(true);
-      } else {
-        setWidthMoreThanHeight(false);
-      }
-    }
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const resize = useViewport();
 
   let [score, setScore] = useState<number>(0);
 
@@ -71,13 +58,13 @@ const Game = () => {
 
   return (
     <>
-      <div className="">
+      <div className="stats">
         <h2 className="score"> Boop: {score}</h2>
         <h2 className="countdown">Time: </h2>
       </div>
       <div
         className="grid"
-        style={WidthMoreThanHeight ? { width: '40vw', height: '40vw' } : { width: '40vh', height: '40vh' }}
+        style={resize ? { width: '40vw', height: '40vw' } : { width: '40vh', height: '40vh' }}
       >
         {positions.map((position) =>
           <Cell
