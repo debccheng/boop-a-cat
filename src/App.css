@@ -1,38 +1,57 @@
-.App {
-  text-align: center;
+.grid {
+  margin: 3rem auto;
+  /* border: 10px solid salmon;
+  background-color: salmon; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.cell {
+  float: left;
+  position: relative;
+  width: 30%;
+  padding-bottom: 30%;
+  /* = width for a 1:1 aspect ratio */
+  margin: 1.66%;
+  /* background-color: slateblue; */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.media {
+  position: absolute;
+  top: 15%;
+  left: 15%;
+  height: 50%; /* = 100% - 2*5% padding */
+  width: 50%; /* = 100% - 2*5% padding */
+  padding: 10%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.cat {
+  position: absolute;
+  top: 69%;
+  height: 75%;
+  width: auto;
+  -webkit-animation: slide 1.5s forwards ease-in;
+  animation: slide 1.5s forwards ease-in;
 }
 
-.App-link {
-  color: #61dafb;
+.catOut {
+  position: absolute;
+  height: 75%;
+  width: auto;
+  -webkit-animation: slideOut 1s forwards ease-out;
+  animation: slideOut 1s forwards ease-out;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes slide {
+  100% { top: 10%; }
+}
+
+@keyframes slideOut {
+  100% {top: 69%}
+}
+
+.box {
+  position: absolute;
+  top: 70%;
+  left: 0;
+  width: 100%;
+  height: auto;
 }
