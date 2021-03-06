@@ -18,7 +18,6 @@ const Game2 = () => {
     const touchedNum: number = parseInt(catID.replace(/\D/g, ''));
     if (!state.catsTouched.includes(touchedNum)) {
       state.catsTouched.push(touchedNum);
-      state.touched += 1;
     }
   }
 
@@ -68,7 +67,6 @@ const initialState: InitState = {
   popupPositions: [],
   score: 0,
   missed: 0,
-  touched: 0,
   catsEscaped: [],
   catsTouched: [],
 };
