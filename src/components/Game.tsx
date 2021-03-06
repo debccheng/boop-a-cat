@@ -1,13 +1,15 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { InitState, Actions } from '../types/types';
 import getPositions from '../helpers/getPositions';
 import useViewport from '../helpers/useViewport';
 import Cell from './Cell';
+import Timer from './Timer';
 
 
-const Game2 = () => {
+const Game = () => {
   const resize = useViewport();
   const [state, dispatch] = useReducer<React.Reducer<InitState, Actions>>(reducer, initialState);
+  const [gameFinished, setGameFinished] = useState<boolean>(false);
 
   const handleClick = (e: any) => {
     dispatch({ type: 'CAT_TOUCHED' });
@@ -21,15 +23,31 @@ const Game2 = () => {
     }
   }
 
+  const handleTimesUp = () => {
+    dispatch({ type: 'CLEANUP'});
+    setGameFinished(true);
+    dispatch({ type: 'GAME_FINISHED'});
+  }
+
+  const handleRestart = () => {
+    dispatch({ type: 'RESTART'});
+    setGameFinished(false);
+  }
+
   // Game Loop
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimeout(() => {
         dispatch({ type: 'CAT_ESCAPED' })
-      }, 4000);
+      }, 3000);
       dispatch({ type: 'CLEANUP' });
       dispatch({ type: 'NEXT' });
-    }, 5000);
+    }, 4000);
+
+    if (gameFinished) {
+      clearTimeout(timer);
+    }
+
     return () => {
       clearTimeout(timer);
     };
@@ -38,9 +56,11 @@ const Game2 = () => {
   return (
     <>
       <div className="stats">
-        {JSON.stringify(state)}
+        {/* {JSON.stringify(state)} */}
         <h2 className="score"> Boop: {state.score}</h2>
-        <h2 className="countdown">Time: </h2>
+        {gameFinished && <h2 className="score">Time's up!</h2>}
+        {gameFinished && <button onClick={handleRestart}>restart</button>}
+        <Timer handleTimesUp={handleTimesUp} timeLimit={state.timeLimit}/>
       </div>
       <div
         className="grid"
@@ -54,6 +74,7 @@ const Game2 = () => {
             clicked={state.catsTouched}
             escaped={state.catsEscaped}
             handleClick={handleClick}
+            timesup={gameFinished}
           />
         )}
       </div>
@@ -67,6 +88,7 @@ const initialState: InitState = {
   popupPositions: [],
   score: 0,
   missed: 0,
+  timeLimit: 10,
   catsEscaped: [],
   catsTouched: [],
 };
@@ -116,9 +138,21 @@ const reducer: React.Reducer<InitState, Actions> = (state, action) => {
         // popupPositions: [1],
       };
 
+    case 'GAME_FINISHED':
+      return {
+        ...state,
+        timeLimit: 0,
+        popupPositions: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        catsEscaped: [],
+        catsTouched: [],
+      }
+
+    case 'RESTART':
+      return initialState;
+
     default:
       throw new Error('Action undefined');
   }
 }
 
-export default Game2;
+export default Game;
