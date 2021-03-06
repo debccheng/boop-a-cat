@@ -27,11 +27,27 @@ const Game = () => {
     dispatch({ type: 'CLEANUP'});
     setGameFinished(true);
     dispatch({ type: 'GAME_FINISHED'});
+    const style = `
+      background-color: gold;
+      border-radius: 100rem;
+    `;
+    const elements = document.getElementsByClassName('media');
+    for (let i = 0; i<elements.length; i+=1) {
+      elements[i].setAttribute("style", style);
+    }
   }
 
   const handleRestart = () => {
     dispatch({ type: 'RESTART'});
     setGameFinished(false);
+    const style = `
+    background-color: inherit;
+    border-radius: 0;
+  `;
+    const elements = document.getElementsByClassName('media');
+    for (let i = 0; i<elements.length; i+=1) {
+      elements[i].setAttribute("style", style);
+    }
   }
 
   // Game Loop

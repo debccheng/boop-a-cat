@@ -48,10 +48,10 @@ img {
   color: #352315;
 }
 
-.grid {
-  /* border: 10px solid salmon;
-  background-color: salmon; */
-}
+/* .grid {
+  border: 10px solid salmon;
+  background-color: salmon;
+} */
 
 .cell {
   float: left;
@@ -68,8 +68,6 @@ img {
   height: 50%; /* = 100% - 2*5% padding */
   width: 50%; /* = 100% - 2*5% padding */
   padding: 10%;
-  /* border: 1px solid gold;
-  background-color: gold; */
 }
 
 .cat {
