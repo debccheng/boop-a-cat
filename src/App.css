@@ -35,14 +35,14 @@ img {
 
 .stats {
   display: flex;
-  margin: 0;
+  margin: 0 0 1rem 0;
 }
 
-.score, .countdown {
+.score, .countdown, .timesup {
   font-family: 'East Sea Dokdo', sans-serif;
   font-size: 1.2rem;
   text-transform: uppercase;
-  letter-spacing: 0.2rem;
+  letter-spacing: 0.1rem;
   margin: 0 1rem;
   color: #352315;
 }
@@ -128,4 +128,20 @@ img {
   40%, 60% {
     transform: translate(-1%);
   }
+}
+
+.restartButton {
+  font-family: 'East Sea Dokdo', sans-serif;
+  border: none;
+  background-color: #352315;
+  color: #fff;
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  border-radius: 0.2rem;
+}
+
+.restartButton:hover {
+  cursor: pointer;
+  background-color: #4d321d;
 }

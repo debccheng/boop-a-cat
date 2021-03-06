@@ -39,10 +39,10 @@ const Game = () => {
     const timer = setTimeout(() => {
       setTimeout(() => {
         dispatch({ type: 'CAT_ESCAPED' })
-      }, 3000);
+      }, 2500);
       dispatch({ type: 'CLEANUP' });
       dispatch({ type: 'NEXT' });
-    }, 4000);
+    }, 3000);
 
     if (gameFinished) {
       clearTimeout(timer);
@@ -58,9 +58,9 @@ const Game = () => {
       <div className="stats">
         {/* {JSON.stringify(state)} */}
         <h2 className="score"> Boop: {state.score}</h2>
-        {gameFinished && <h2 className="score">Time's up!</h2>}
-        {gameFinished && <button onClick={handleRestart}>restart</button>}
         <Timer handleTimesUp={handleTimesUp} timeLimit={state.timeLimit}/>
+        {gameFinished && <h2 className="timesup">Time's up!</h2>}
+        {gameFinished && <button onClick={handleRestart} className="restartButton">restart</button>}
       </div>
       <div
         className="grid"
@@ -88,7 +88,7 @@ const initialState: InitState = {
   popupPositions: [],
   score: 0,
   missed: 0,
-  timeLimit: 10,
+  timeLimit: 40,
   catsEscaped: [],
   catsTouched: [],
 };
@@ -135,7 +135,6 @@ const reducer: React.Reducer<InitState, Actions> = (state, action) => {
       return {
         ...state,
         popupPositions: getPositions(totalPositions),
-        // popupPositions: [1],
       };
 
     case 'GAME_FINISHED':
