@@ -2,22 +2,9 @@ import React from 'react';
 import cat from '../assets/cat.png';
 import clickedCat from '../assets/cat_petted.png';
 import box from '../assets/box.png'
+import { CellProps } from '../types/types';
 
-const Cell = ({
-  popup,
-  id,
-  clicked,
-  escaped,
-  handleClick,
-}:
-  {
-    popup: boolean,
-    id: number,
-    clicked: Array<number>,
-    escaped: Array<number>,
-    handleClick: (e: any) => void,
-  }) => {
-
+const Cell: React.FC<CellProps> = ({ popup, id, clicked, escaped, handleClick, timesup }) => {
   const animateBox = {
     "animation": "shake 0.4s linear both"
   };
@@ -36,9 +23,9 @@ const Cell = ({
                 className={
                   `cat
                   ${clicked.includes(id) ? 'catOut' : null}
-                  ${escaped.includes(id) ? 'catEscape' : null}
+                  ${escaped.includes(id) && !timesup ? 'catEscape' : null}
                 `}
-                onClick={clicked.includes(id) ? undefined : handleClick}
+                onClick={!clicked.includes(id) && !timesup ? handleClick : undefined}
               />
             </>
             :
