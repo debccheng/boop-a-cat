@@ -1,56 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
+import { InitState, Actions } from '../types/types';
+import getPositions from '../helpers/getPositions';
 import useViewport from '../helpers/useViewport';
 import Cell from './Cell';
 
-const Game = () => {
 
+const Game2 = () => {
   const resize = useViewport();
+  const [state, dispatch] = useReducer<React.Reducer<InitState, Actions>>(reducer, initialState);
 
-  let [score, setScore] = useState<number>(0);
-
-  // Set animation for escaped cat in child component
-  const [escaped, setEscaped] = useState<boolean>(false);
-
-  // Determine random popup
-  const getRandomInt = (min: number, max: number, currentNum?: number): number => {
-    if (!currentNum) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+  const handleClick = (e: any) => {
+    dispatch({ type: 'CAT_TOUCHED' });
+    const catID = e.target.id;
+    const catTouched: HTMLElement = document.getElementById(catID)!;
+    const top: string = window.getComputedStyle(catTouched).getPropertyValue('top');
+    catTouched.setAttribute("style", `top: ${top}`);
+    const touchedNum: number = parseInt(catID.replace(/\D/g, ''));
+    if (!state.catsTouched.includes(touchedNum)) {
+      state.catsTouched.push(touchedNum);
+      state.touched += 1;
     }
-    const num: number = Math.floor(Math.random() * (max - min + 1)) + min;
-    return num === currentNum ? getRandomInt(min, max, currentNum) : num;
-  }
-  const positions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const [popupPosition, setPopupPosition] = useState(getRandomInt(1, 9));
-
-  // Handle clicking on cat
-  const [clicked, setClicked] = useState<boolean>(false);
-  const handleClick = () => {
-    setClicked(true);
-    setScore(score += 1);
-    const catImg: Element = document.getElementsByClassName('cat')[0];
-    if (catImg) {
-      const top = window.getComputedStyle(catImg).getPropertyValue('top');
-      catImg.setAttribute("style", `top: ${top}`);
-    }
-  };
-
-  const popCat = () => {
-    setPopupPosition(getRandomInt(1, 9, popupPosition));
-  }
-  const resetClick = () => {
-    setClicked(false);
-  }
-  const resetEscaped = () => {
-    setEscaped(false);
   }
 
   // Game Loop
   useEffect(() => {
     const timer = setTimeout(() => {
-      popCat();
-      resetClick();
-      resetEscaped();
-    }, 2500);
+      setTimeout(() => {
+        dispatch({ type: 'CAT_ESCAPED' })
+      }, 4000);
+      dispatch({ type: 'CLEANUP' });
+      dispatch({ type: 'NEXT' });
+    }, 5000);
     return () => {
       clearTimeout(timer);
     };
@@ -59,22 +39,22 @@ const Game = () => {
   return (
     <>
       <div className="stats">
-        <h2 className="score"> Boop: {score}</h2>
+        {JSON.stringify(state)}
+        <h2 className="score"> Boop: {state.score}</h2>
         <h2 className="countdown">Time: </h2>
       </div>
       <div
         className="grid"
         style={resize ? { width: '40vw', height: '40vw' } : { width: '40vh', height: '40vh' }}
       >
-        {positions.map((position) =>
+        {totalPositions.map((position) =>
           <Cell
             key={position}
             id={position}
-            popup={popupPosition}
-            clicked={clicked}
-            escaped={escaped}
+            popup={state.popupPositions.includes(position)}
+            clicked={state.catsTouched}
+            escaped={state.catsEscaped}
             handleClick={handleClick}
-            setEscaped={setEscaped}
           />
         )}
       </div>
@@ -82,4 +62,65 @@ const Game = () => {
   );
 }
 
-export default Game;
+const totalPositions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const initialState: InitState = {
+  popupPositions: [],
+  score: 0,
+  missed: 0,
+  touched: 0,
+  catsEscaped: [],
+  catsTouched: [],
+};
+
+const reducer: React.Reducer<InitState, Actions> = (state, action) => {
+  switch (action.type) {
+    case 'CAT_TOUCHED':
+      return {
+        ...state,
+        score: state.score + 1,
+      };
+
+    case 'CAT_ESCAPED':
+      const cats: HTMLCollection = document.getElementsByClassName('cat')
+      const touchedCats: HTMLCollection = document.getElementsByClassName('catOut');
+      const touched: Array<number> = [];
+      const escaped: Array<number> = [];
+      for (let i = 0; i < touchedCats.length; i += 1) {
+        const id: string = touchedCats[i].getAttribute("id")!.replace(/\D/g, '');
+        touched.push(parseInt(id));
+      }
+      for (let j = 0; j < cats.length; j += 1) {
+        const id: number = parseInt(cats[j].getAttribute("id")!.replace(/\D/g, ''));
+        if (!touched.includes(id)) {
+          escaped.push(id);
+        }
+        document.getElementById(`box-${id}`)!.style.animation = '';
+      }
+      return {
+        ...state,
+        catsEscaped: escaped,
+      };
+
+    case 'CLEANUP':
+      return {
+        ...state,
+        popupPositions: [],
+        missed: state.missed + state.catsEscaped.length,
+        catsEscaped: [],
+        catsTouched: [],
+      }
+
+    case 'NEXT':
+      return {
+        ...state,
+        popupPositions: getPositions(totalPositions),
+        // popupPositions: [1],
+      };
+
+    default:
+      throw new Error('Action undefined');
+  }
+}
+
+export default Game2;

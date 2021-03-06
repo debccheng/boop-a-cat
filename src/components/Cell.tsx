@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cat from '../assets/cat.png';
 import clickedCat from '../assets/cat_petted.png';
 import box from '../assets/box.png'
@@ -9,51 +9,51 @@ const Cell = ({
   clicked,
   escaped,
   handleClick,
-  setEscaped,
 }:
   {
-    popup: number,
+    popup: boolean,
     id: number,
-    clicked: boolean,
-    escaped: boolean,
-    handleClick: () => void,
-    setEscaped: React.Dispatch<React.SetStateAction<boolean>>,
+    clicked: Array<number>,
+    escaped: Array<number>,
+    handleClick: (e: any) => void,
   }) => {
 
   const animateBox = {
-    "WebkitAnimation": "shake 0.4s linear both",
     "animation": "shake 0.4s linear both"
   };
 
-  setTimeout(() => {
-    setEscaped(true);
-  }, 2500);
-
   return (
-    <div className="cell" id={`cell-${id}`}>
-      <div className="media" >
-        {popup === id
-          ?
-          <>
-            {console.log(escaped)}
-            <img
-              src={clicked ? clickedCat : cat}
-              alt="cat"
-              className={`cat ${clicked ? 'catOut' : null} ${escaped ? 'catEscape' : null}`}
-              onClick={handleClick}
-            />
-          </>
-          :
-          null
-        }
-        <img
-          src={box}
-          alt="box"
-          className="box"
-          style={popup === id ? animateBox : undefined}
-        />
+    <>
+      <div className="cell" id={`cell-${id}`}>
+        <div className="media" >
+          {popup
+            ?
+            <>
+              <img
+                id={`cat-${id}`}
+                src={clicked.includes(id) ? clickedCat : cat}
+                alt="cat"
+                className={
+                  `cat
+                  ${clicked.includes(id) ? 'catOut' : null}
+                  ${escaped.includes(id) ? 'catEscape' : null}
+                `}
+                onClick={clicked.includes(id) ? undefined : handleClick}
+              />
+            </>
+            :
+            null
+          }
+          <img
+            id={`box-${id}`}
+            src={box}
+            alt="box"
+            className="box"
+            style={popup ? animateBox : undefined}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
