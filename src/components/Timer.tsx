@@ -3,7 +3,8 @@ import { TimerProps } from '../types/types';
 
 const Timer: React.FC<TimerProps> = ({ timeLimit, handleTimesUp}) => {
   const [counter, setCounter] = useState<number>(timeLimit);
-  
+  // TODO: Figure out a better way to restart timer
+
   let interval: any = null;
 
   useEffect(() => {
@@ -27,17 +28,6 @@ const Timer: React.FC<TimerProps> = ({ timeLimit, handleTimesUp}) => {
       setCounter(timeLimit);
     }
   }, [interval, timeLimit]);
-
-  // useEffect(() => {
-  //   if (counter > 0) {
-  //     setTimeout(() => {
-  //       setCounter(counter - 1);
-  //     }, 1000);
-  //   } else {
-  //     setCounter(0);
-  //     handleTimesUp();
-  //   }
-  // }, [counter, timeLimit]);
 
   return (
     <h2 className="countdown">
