@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/boop-a-cat/static/css/main.699eab21.chunk.css",
+    "main.js": "/boop-a-cat/static/js/main.a7496249.chunk.js",
+    "main.js.map": "/boop-a-cat/static/js/main.a7496249.chunk.js.map",
+    "runtime-main.js": "/boop-a-cat/static/js/runtime-main.1fa8ac89.js",
+    "runtime-main.js.map": "/boop-a-cat/static/js/runtime-main.1fa8ac89.js.map",
+    "static/js/2.3c45d28d.chunk.js": "/boop-a-cat/static/js/2.3c45d28d.chunk.js",
+    "static/js/2.3c45d28d.chunk.js.map": "/boop-a-cat/static/js/2.3c45d28d.chunk.js.map",
+    "static/js/3.c8dc02cc.chunk.js": "/boop-a-cat/static/js/3.c8dc02cc.chunk.js",
+    "static/js/3.c8dc02cc.chunk.js.map": "/boop-a-cat/static/js/3.c8dc02cc.chunk.js.map",
+    "index.html": "/boop-a-cat/index.html",
+    "static/css/main.699eab21.chunk.css.map": "/boop-a-cat/static/css/main.699eab21.chunk.css.map",
+    "static/js/2.3c45d28d.chunk.js.LICENSE.txt": "/boop-a-cat/static/js/2.3c45d28d.chunk.js.LICENSE.txt",
+    "static/media/box.fc12d1a3.png": "/boop-a-cat/static/media/box.fc12d1a3.png",
+    "static/media/cat.e59a3b8a.png": "/boop-a-cat/static/media/cat.e59a3b8a.png",
+    "static/media/cat_petted.ed04e662.png": "/boop-a-cat/static/media/cat_petted.ed04e662.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1fa8ac89.js",
+    "static/js/2.3c45d28d.chunk.js",
+    "static/css/main.699eab21.chunk.css",
+    "static/js/main.a7496249.chunk.js"
+  ]
+}
