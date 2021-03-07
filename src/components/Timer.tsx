@@ -25,7 +25,6 @@ const Timer: React.FC<TimerProps> = ({ timeLimit, handleTimesUp}) => {
       Time: {counter}
     </h2>
   );
-
 }
 
 export default Timer;
