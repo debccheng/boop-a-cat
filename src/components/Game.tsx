@@ -103,7 +103,7 @@ const initialState: InitState = {
   popupPositions: [],
   score: 0,
   missed: 0,
-  timeLimit: 10,
+  timeLimit: 60,
   catsEscaped: [],
   catsTouched: [],
 };
