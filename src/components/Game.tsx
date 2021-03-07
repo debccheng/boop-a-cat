@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, useCallback } from 'react';
 import { InitState, Actions } from '../types/types';
 import getPositions from '../helpers/getPositions';
 import useViewport from '../helpers/useViewport';
@@ -23,7 +23,7 @@ const Game = () => {
     }
   }
 
-  const handleTimesUp = () => {
+  const handleTimesUp = useCallback(() => {
     dispatch({ type: 'CLEANUP'});
     setGameFinished(true);
     dispatch({ type: 'GAME_FINISHED'});
@@ -35,7 +35,7 @@ const Game = () => {
     for (let i = 0; i<elements.length; i+=1) {
       elements[i].setAttribute("style", style);
     }
-  }
+  }, []);
 
   const handleRestart = () => {
     dispatch({ type: 'RESTART'});
@@ -72,9 +72,8 @@ const Game = () => {
   return (
     <>
       <div className="stats">
-        {/* {JSON.stringify(state)} */}
         <h2 className="score"> Boop: {state.score}</h2>
-        <Timer handleTimesUp={handleTimesUp} timeLimit={state.timeLimit}/>
+        {state.timeLimit ? <Timer handleTimesUp={handleTimesUp} timeLimit={state.timeLimit}/> : null}
         {gameFinished && <h2 className="timesup">Time's up!</h2>}
         {gameFinished && <button onClick={handleRestart} className="restartButton">restart</button>}
       </div>
@@ -104,7 +103,7 @@ const initialState: InitState = {
   popupPositions: [],
   score: 0,
   missed: 0,
-  timeLimit: 40,
+  timeLimit: 10,
   catsEscaped: [],
   catsTouched: [],
 };
