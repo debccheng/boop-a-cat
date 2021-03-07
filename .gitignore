@@ -22,5 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+/_favicon
 /src/_old_version
 /src/assets/cat_sprites.psd

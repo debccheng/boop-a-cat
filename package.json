@@ -1,5 +1,6 @@
 {
   "name": "pet-a-cat",
+  "homepage": "https://dccheng.github.io/boop-a-cat",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,7 +22,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "ts-node": "./node_modules/.bin/ts-node"
+    "ts-node": "./node_modules/.bin/ts-node",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^3.1.0",
     "ts-node": "^9.1.1"
   }
 }
