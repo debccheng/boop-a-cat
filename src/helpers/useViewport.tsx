@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 
-const useViewport = () => {
+const useViewport = (): boolean => {
   const [WidthMoreThanHeight, setWidthMoreThanHeight] = useState<boolean>(true);
   useEffect(() => {
     const handleResize = () => {
