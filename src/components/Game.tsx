@@ -11,6 +11,54 @@ const Game = () => {
   const [state, dispatch] = useReducer<React.Reducer<InitState, Actions>>(reducer, initialState);
   const [gameFinished, setGameFinished] = useState<boolean>(false);
 
+  const getHighScore = (): number => {
+    const oldScore: string | null = localStorage.getItem('boop-a-cat-high-score');
+    if (!oldScore) {
+      return 0;
+    } else {
+      return parseInt(oldScore);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('storage', () => {
+      setHighScore(JSON.parse(localStorage.getItem('boop-a-cat-high-score')!))
+    });
+  })
+
+  const [highScore, setHighScore] = useState<number>(getHighScore());
+
+  const handleTimesUp = useCallback(() => {
+    dispatch({ type: 'CLEANUP' });
+    setGameFinished(true);
+    dispatch({ type: 'GAME_FINISHED' });
+    if (state.score > highScore) {
+      setHighScore(state.score);
+      localStorage.setItem('boop-a-cat-high-score', state.score.toString());
+    }
+    const style = `
+      background-color: gold;
+      border-radius: 100rem;
+    `;
+    const elements = document.getElementsByClassName('media');
+    for (let i = 0; i < elements.length; i += 1) {
+      elements[i].setAttribute("style", style);
+    }
+  }, [highScore, state.score]);
+
+  const handleRestart = () => {
+    dispatch({ type: 'RESTART' });
+    setGameFinished(false);
+    const style = `
+    background-color: inherit;
+    border-radius: 0;
+  `;
+    const elements = document.getElementsByClassName('media');
+    for (let i = 0; i < elements.length; i += 1) {
+      elements[i].setAttribute("style", style);
+    }
+  }
+
   const handleClick = (e: any) => {
     dispatch({ type: 'CAT_TOUCHED' });
     const catID = e.target.id;
@@ -20,33 +68,6 @@ const Game = () => {
     const touchedNum: number = parseInt(catID.replace(/\D/g, ''));
     if (!state.catsTouched.includes(touchedNum)) {
       state.catsTouched.push(touchedNum);
-    }
-  }
-
-  const handleTimesUp = useCallback(() => {
-    dispatch({ type: 'CLEANUP'});
-    setGameFinished(true);
-    dispatch({ type: 'GAME_FINISHED'});
-    const style = `
-      background-color: gold;
-      border-radius: 100rem;
-    `;
-    const elements = document.getElementsByClassName('media');
-    for (let i = 0; i<elements.length; i+=1) {
-      elements[i].setAttribute("style", style);
-    }
-  }, []);
-
-  const handleRestart = () => {
-    dispatch({ type: 'RESTART'});
-    setGameFinished(false);
-    const style = `
-    background-color: inherit;
-    border-radius: 0;
-  `;
-    const elements = document.getElementsByClassName('media');
-    for (let i = 0; i<elements.length; i+=1) {
-      elements[i].setAttribute("style", style);
     }
   }
 
@@ -72,8 +93,9 @@ const Game = () => {
   return (
     <>
       <div className="stats">
+        {highScore > 0 ? <h2 className="score"> High Score: {highScore}</h2> : null}
         <h2 className="score"> Boop: {state.score}</h2>
-        {state.timeLimit ? <Timer handleTimesUp={handleTimesUp} timeLimit={state.timeLimit}/> : null}
+        {state.timeLimit ? <Timer handleTimesUp={handleTimesUp} timeLimit={state.timeLimit} /> : null}
         {gameFinished && <h2 className="timesup">Time's up!</h2>}
         {gameFinished && <button onClick={handleRestart} className="restartButton">restart</button>}
       </div>
@@ -100,10 +122,11 @@ const Game = () => {
 const totalPositions: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const initialState: InitState = {
+  session: Date(),
   popupPositions: [],
   score: 0,
   missed: 0,
-  timeLimit: 60,
+  timeLimit: 40,
   catsEscaped: [],
   catsTouched: [],
 };

@@ -1,4 +1,5 @@
 export interface InitState {
+  session: string,
   popupPositions: Array<number>,
   score: number,
   missed: number,
