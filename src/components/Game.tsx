@@ -5,7 +5,6 @@ import useViewport from '../helpers/useViewport';
 import Cell from './Cell';
 import Timer from './Timer';
 
-
 const Game = () => {
   const resize = useViewport();
   const [start, setStart] = useState<boolean>(false);
@@ -23,17 +22,17 @@ const Game = () => {
   const [highScore, setHighScore] = useState<number>(getHighScore());
   useEffect(() => {
     window.addEventListener('storage', () => {
-      setHighScore(JSON.parse(localStorage.getItem('boop-a-cat-high-score')!))
+      setHighScore(JSON.parse(localStorage.getItem('boop-a-cat-high-score')!));
     });
-  })
+    if (state.score > highScore && state.gameFinished) {
+      setHighScore(state.score);
+      localStorage.setItem('boop-a-cat-high-score', state.score.toString());
+    }
+  }, [state.score, highScore, state.gameFinished]);
 
   const handleTimesUp = useCallback(() => {
     dispatch({ type: 'CLEANUP' });
     dispatch({ type: 'GAME_FINISHED' });
-    if (state.score > highScore) {
-      setHighScore(state.score);
-      localStorage.setItem('boop-a-cat-high-score', state.score.toString());
-    }
     const style = `
       background-color: gold;
       border-radius: 100rem;
@@ -42,7 +41,7 @@ const Game = () => {
     for (let i = 0; i < elements.length; i += 1) {
       elements[i].setAttribute("style", style);
     }
-  }, [highScore, state.score]);
+  }, []);
 
   const handleStart = () => {
     setStart(true);
@@ -137,7 +136,7 @@ const initialState: InitState = {
   popupPositions: [],
   score: 0,
   missed: 0,
-  timeLimit: 40,
+  timeLimit:40,
   catsEscaped: [],
   catsTouched: [],
   gameFinished: false,

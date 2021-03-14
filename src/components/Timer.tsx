@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { TimerProps } from '../types/types';
 
-const Timer: React.FC<TimerProps> = ({ timeLimit, handleTimesUp}) => {
+const Timer: React.FC<TimerProps> = ({ timeLimit, handleTimesUp }) => {
   const [counter, setCounter] = useState<number>(timeLimit);
 
   useEffect(() => {
     const countdown = () => {
-      if (counter >0) {
-        setCounter(state => state -1)
+      if (counter > 0) {
+        setCounter(counter => counter - 1);
       } else {
-        setCounter(0)
-        clearInterval(interval)
+        setCounter(0);
+        clearInterval(interval);
         handleTimesUp();
       }
     }
@@ -18,7 +18,7 @@ const Timer: React.FC<TimerProps> = ({ timeLimit, handleTimesUp}) => {
     return () => {
       clearInterval(interval);
     }
-  }, [counter, handleTimesUp, timeLimit])
+  }, [counter, handleTimesUp]);
 
   return (
     <h2 className="countdown">
