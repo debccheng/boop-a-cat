@@ -6,6 +6,7 @@ export interface InitState {
   timeLimit: number,
   catsEscaped: Array<number>,
   catsTouched: Array<number>,
+  gameFinished: boolean,
 }
 
 export type Actions =

@@ -8,8 +8,8 @@ import Timer from './Timer';
 
 const Game = () => {
   const resize = useViewport();
+  const [start, setStart] = useState<boolean>(false);
   const [state, dispatch] = useReducer<React.Reducer<InitState, Actions>>(reducer, initialState);
-  const [gameFinished, setGameFinished] = useState<boolean>(false);
 
   const getHighScore = (): number => {
     const oldScore: string | null = localStorage.getItem('boop-a-cat-high-score');
@@ -20,17 +20,15 @@ const Game = () => {
     }
   }
 
+  const [highScore, setHighScore] = useState<number>(getHighScore());
   useEffect(() => {
     window.addEventListener('storage', () => {
       setHighScore(JSON.parse(localStorage.getItem('boop-a-cat-high-score')!))
     });
   })
 
-  const [highScore, setHighScore] = useState<number>(getHighScore());
-
   const handleTimesUp = useCallback(() => {
     dispatch({ type: 'CLEANUP' });
-    setGameFinished(true);
     dispatch({ type: 'GAME_FINISHED' });
     if (state.score > highScore) {
       setHighScore(state.score);
@@ -46,9 +44,12 @@ const Game = () => {
     }
   }, [highScore, state.score]);
 
+  const handleStart = () => {
+    setStart(true);
+  }
+
   const handleRestart = () => {
     dispatch({ type: 'RESTART' });
-    setGameFinished(false);
     const style = `
     background-color: inherit;
     border-radius: 0;
@@ -73,31 +74,41 @@ const Game = () => {
 
   // Game Loop
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeout(() => {
-        dispatch({ type: 'CAT_ESCAPED' })
-      }, 2500);
-      dispatch({ type: 'CLEANUP' });
-      dispatch({ type: 'NEXT' });
-    }, 3000);
+    if (start) {
+      const timer = setTimeout(() => {
+        setTimeout(() => {
+          dispatch({ type: 'CAT_ESCAPED' })
+        }, 2500);
+        dispatch({ type: 'CLEANUP' });
+        dispatch({ type: 'NEXT' });
+      }, 3000);
 
-    if (gameFinished) {
-      clearTimeout(timer);
+      if (state.gameFinished) {
+        clearTimeout(timer);
+      }
+
+      return () => {
+        clearTimeout(timer);
+      };
     }
-
-    return () => {
-      clearTimeout(timer);
-    };
   });
 
   return (
     <>
       <div className="stats">
         {highScore > 0 ? <h2 className="score"> High Score: {highScore}</h2> : null}
-        <h2 className="score"> Boop: {state.score}</h2>
-        {state.timeLimit ? <Timer handleTimesUp={handleTimesUp} timeLimit={state.timeLimit} /> : null}
-        {gameFinished && <h2 className="timesup">Time's up!</h2>}
-        {gameFinished && <button onClick={handleRestart} className="restartButton">restart</button>}
+        {start && <h2 className="score"> Boop: {state.score}</h2>}
+        {!start && <button onClick={handleStart} className="startButton">Start</button>}
+        {start && state.timeLimit
+          ? <Timer handleTimesUp={handleTimesUp} timeLimit={state.timeLimit} />
+          : null
+        }
+        {state.gameFinished &&
+          <>
+            <h2 className="timesup">Time's up!</h2>
+            <button onClick={handleRestart} className="startButton">restart</button>
+          </>
+        }
       </div>
       <div
         className="grid"
@@ -111,7 +122,7 @@ const Game = () => {
             clicked={state.catsTouched}
             escaped={state.catsEscaped}
             handleClick={handleClick}
-            timesup={gameFinished}
+            timesup={state.gameFinished}
           />
         )}
       </div>
@@ -129,6 +140,7 @@ const initialState: InitState = {
   timeLimit: 40,
   catsEscaped: [],
   catsTouched: [],
+  gameFinished: false,
 };
 
 const reducer: React.Reducer<InitState, Actions> = (state, action) => {
@@ -182,6 +194,7 @@ const reducer: React.Reducer<InitState, Actions> = (state, action) => {
         popupPositions: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         catsEscaped: [],
         catsTouched: [],
+        gameFinished: true,
       }
 
     case 'RESTART':
