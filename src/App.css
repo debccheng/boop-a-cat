@@ -4,6 +4,14 @@ body {
   height: 100vh;
 }
 
+a {
+  color: black;
+}
+
+a:visited {
+  color: black;
+}
+
 img {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -143,4 +151,23 @@ img {
 .restartButton:hover {
   cursor: pointer;
   background-color: #4d321d;
+}
+
+.footer {
+  margin-top: auto;
+  width: 100%;
+  background-color: rgb(192, 181, 160);
+  max-height: 20px;
+  font-size: 11px;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 450px) {
+  .stats >h2 {
+    font-size: 0.8rem;
+  }
+  .restartButton {
+    font-size: 0.8rem;
+  }
 }
